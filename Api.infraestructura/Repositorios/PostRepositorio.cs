@@ -2,10 +2,7 @@
 using Api.Core.Interfaces;
 using Api.infraestructura.Datos;
 using Microsoft.EntityFrameworkCore;
-using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace Api.infraestructura.Repositorios
@@ -20,6 +17,13 @@ namespace Api.infraestructura.Repositorios
         public async Task<IEnumerable<Publicacion>> GetPosts()
         {
             var posts = await _context.Publicacion.ToListAsync();
+
+            return posts;
+
+        }
+        public async Task<Publicacion> GetPost(int id)
+        {
+            var posts = await _context.Publicacion.FirstOrDefaultAsync(x=> x.IdPublicacion == id);
 
             return posts;
 

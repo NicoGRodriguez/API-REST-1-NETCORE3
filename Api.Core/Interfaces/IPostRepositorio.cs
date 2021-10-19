@@ -9,5 +9,7 @@ namespace Api.Core.Interfaces
     public interface IPostRepositorio 
     {
         Task<IEnumerable<Publicacion>> GetPosts();
+        Task<Publicacion> GetPost(int id);
+
     }
 }

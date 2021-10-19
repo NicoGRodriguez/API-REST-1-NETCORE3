@@ -23,5 +23,12 @@ namespace Api.Controllers
 
             return Ok(posts);
         }
+        [HttpGet("{id}")]
+        public async Task<IActionResult> GetPost(int id)
+        {
+            var post = await _postRepositorio.GetPost(id);
+
+            return Ok(post);
+        }
     }
 }
