@@ -28,5 +28,10 @@ namespace Api.infraestructura.Repositorios
             return posts;
 
         }
+        public async Task InsertPost(Publicacion post)
+        {
+            _context.Publicacion.Add(post);
+            await _context.SaveChangesAsync();
+        }
     }
 }
