@@ -1,6 +1,7 @@
 ﻿using Api.Core.DTOs;
 using Api.Core.Entidades;
 using Api.Core.Interfaces;
+using Api.Respuestas;
 using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
 using System.Collections.Generic;
@@ -12,21 +13,22 @@ namespace Api.Controllers
     [ApiController]
     public class PostController : ControllerBase
     {
-        private readonly IPostRepositorio _postRepositorio;
+        private readonly IPublicacionServicio _publicacionServicio;
         private readonly IMapper _mapper;
 
-        public PostController(IPostRepositorio postRepositorio, IMapper mapper)
+        public PostController(IPublicacionServicio publicacionServicio, IMapper mapper)
         {
-            _postRepositorio = postRepositorio;
+            _publicacionServicio = publicacionServicio;
             _mapper = mapper;
         }
 
         [HttpGet]
         public async Task<IActionResult> GetPosts()
         {
-            var posts = await _postRepositorio.GetPosts();
+            var posts = await _publicacionServicio.GetPosts();
             //mapeo de una entidad base a un entidad origen o destino
             var postsDTO = _mapper.Map<IEnumerable<PublicacionDTO>>(posts);
+            var respuesta = new ApiRepuesta<IEnumerable<PublicacionDTO>>(postsDTO);
             //Metodo viejo de mapeo
             //posts.Select(x => new PublicacionDTO
             //{
@@ -36,21 +38,44 @@ namespace Api.Controllers
             //    Imagen = x.Imagen,                
             //    IdUsuario = x.IdUsuario
             //});
-            return Ok(postsDTO);
+            return Ok(respuesta);
         }
         [HttpGet("{id}")]
         public async Task<IActionResult> GetPost(int id)
         {
-            var post = await _postRepositorio.GetPost(id);
-            var postDTO = _mapper.Map<IEnumerable<PublicacionDTO>>(post);
-            return Ok(postDTO);
+            var post = await _publicacionServicio.GetPost(id);
+            var postDTO = _mapper.Map<PublicacionDTO>(post);
+            var respuesta = new ApiRepuesta<PublicacionDTO>(postDTO);
+            return Ok(respuesta);
         }
         [HttpPost]
         public async Task<IActionResult> Post(PublicacionDTO postDTO)
         {
+            //if (!ModelState.IsValid)
+            //{
+            //    return BadRequest();
+            //}
             var post = _mapper.Map<Publicacion>(postDTO);
-            await _postRepositorio.InsertPost(post);
-            return Ok(post);
+            await _publicacionServicio.InsertPost(post);
+            postDTO = _mapper.Map<PublicacionDTO>(post);
+            var respuesta = new ApiRepuesta<PublicacionDTO>(postDTO);
+            return Ok(respuesta);
+        }
+        [HttpPut]
+        public async Task<IActionResult> Put(int id, PublicacionDTO postDTO)
+        {
+            var post = _mapper.Map<Publicacion>(postDTO);
+            post.IdPublicacion = id;
+            var result = await _publicacionServicio.UpDatePost(post);
+            var respuesta = new ApiRepuesta<bool>(result);
+            return Ok(respuesta);
+        }
+        [HttpDelete("{id}")]
+        public async Task<IActionResult> Delete(int id)
+        {
+            var result = await _publicacionServicio.DeletePost(id);
+            var respuesta = new ApiRepuesta<bool>(result);
+            return Ok(respuesta);
         }
     }
 }

@@ -1,6 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace Api.Core.DTOs
 {
@@ -9,7 +7,7 @@ namespace Api.Core.DTOs
     {
         public int IdPublicacion { get; set; }
         public int IdUsuario { get; set; }
-        public DateTime Fecha { get; set; }
+        public DateTime? Fecha { get; set; }
         public string Descripcion { get; set; }
         public string Imagen { get; set; }
     }

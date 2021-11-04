@@ -1,6 +1,9 @@
 using Api.Core.Interfaces;
+using Api.Core.Servicios;
 using Api.infraestructura.Datos;
+using Api.infraestructura.Filtros;
 using Api.infraestructura.Repositorios;
+using FluentValidation.AspNetCore;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.EntityFrameworkCore;
@@ -30,14 +33,28 @@ namespace Api
             services.AddControllers().AddNewtonsoftJson(option =>
             {
                 option.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore;
+            })
+            //Apicontroller no valida, se hace manual.
+            .ConfigureApiBehaviorOptions(option => { 
+                //option.SuppressModelStateInvalidFilter = true; 
             });
 
             //conexion a la base datos
-            services.AddDbContext<SocialApiContext>(options => options.UseSqlServer(Configuration. GetConnectionString("SocialApi"))
-            ); 
+            services.AddDbContext<SocialApiContext>(options => options.UseSqlServer(Configuration.GetConnectionString("SocialApi"))
+            );
             //Dependencias
+            services.AddTransient<IPublicacionServicio, PublicacionServicio>();
             services.AddTransient<IPostRepositorio, PostRepositorio>();
+            services.AddTransient<IUsuarioRepositorio, UsuarioRepositorio>();
 
+            //Registrar filtro a nivel global
+            services.AddMvc(Option =>
+            {
+                Option.Filters.Add<ValidacionFiltro>();
+            }).AddFluentValidation(Options =>
+            {
+                Options.RegisterValidatorsFromAssemblies(AppDomain.CurrentDomain.GetAssemblies());
+            });
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

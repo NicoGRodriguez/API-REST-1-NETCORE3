@@ -24,7 +24,6 @@ namespace Api.infraestructura.Repositorios
         public async Task<Publicacion> GetPost(int id)
         {
             var posts = await _context.Publicacion.FirstOrDefaultAsync(x=> x.IdPublicacion == id);
-
             return posts;
 
         }
@@ -32,6 +31,24 @@ namespace Api.infraestructura.Repositorios
         {
             _context.Publicacion.Add(post);
             await _context.SaveChangesAsync();
+        }
+        public async Task<bool> UpDatePost(Publicacion publi)
+        {
+            var currentPubli = await GetPost(publi.IdPublicacion);
+            currentPubli.Fecha = publi.Fecha;
+            currentPubli.Descripcion = publi.Descripcion;
+            currentPubli.Comentario = publi.Comentario;
+            currentPubli.Imagen = publi.Imagen;
+            int rows = await _context.SaveChangesAsync();
+            return rows > 0;
+            //rows > 9 que tiene que haber al menos un registro
+        }
+        public async Task<bool> DeletePost(int Id)
+        {
+            var currentPubli = await GetPost(Id);
+            _context.Publicacion.Remove(currentPubli);
+            int rows = await _context.SaveChangesAsync();
+            return rows > 0;
         }
     }
 }
