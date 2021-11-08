@@ -46,7 +46,8 @@ namespace Api
             services.AddTransient<IPublicacionServicio, PublicacionServicio>();
             //Registro base repositorio
             services.AddScoped(typeof(IRepository<>), typeof(BaseRepositorio<>));
-
+            services.AddTransient<IUnitOfWork,UnitOfWork>();
+            
             //Registrar filtro a nivel global
             services.AddMvc(Option =>
             {

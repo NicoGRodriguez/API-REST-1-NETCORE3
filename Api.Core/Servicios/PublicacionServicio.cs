@@ -9,27 +9,25 @@ namespace Api.Core.Servicios
 {
     public class PublicacionServicio : IPublicacionServicio
     {
-        private readonly IRepository<Publicacion> _postRepositorio;
-        private readonly IRepository<Usuario> _usuarioRepositorio;
-        public PublicacionServicio(IRepository<Publicacion> postRepositorio, IRepository<Usuario> usuarioRepositorio)
+        private readonly IUnitOfWork _unitOfWork;
+        public PublicacionServicio(IUnitOfWork unitOfWork)
         {
-            _postRepositorio = postRepositorio;
-            _usuarioRepositorio = usuarioRepositorio;
+            _unitOfWork = unitOfWork;
         }
         
         public async Task<Publicacion> GetPost(int id)
         {
-            return await _postRepositorio.GetById(id);
+            return await _unitOfWork.PostRepositorio.GetById(id);
         }
 
         public async Task<IEnumerable<Publicacion>> GetPosts()
         {
-            return await _postRepositorio.GetAll();
+            return await _unitOfWork.PostRepositorio.GetAll();
         }
 
         public async Task InsertPost(Publicacion post)
         {
-            var user = await _usuarioRepositorio.GetById(post.IdUsuario);
+            var user = await _unitOfWork.UserRepositorio.GetById(post.IdUsuario);
             if (user == null)
             {
                 throw new Exception("Usuario inexitente"); 
@@ -38,18 +36,18 @@ namespace Api.Core.Servicios
             {
                 throw new Exception("Contenido no permitido");
             }
-            await _postRepositorio.Add(post);
+            await _unitOfWork.PostRepositorio.Add(post);
         }
 
         public async Task<bool> UpDatePost(Publicacion publi)
         {
-           await _postRepositorio.Update(publi);
+           await _unitOfWork.PostRepositorio.Update(publi);
             return true;
         }
         public async Task<bool> DeletePost(int id)
         {
-            await _postRepositorio.Delete(id);
+            await _unitOfWork.PostRepositorio.Delete(id);
             return true;
         }
     }
-}
+}   
