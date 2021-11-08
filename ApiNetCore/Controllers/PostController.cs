@@ -25,10 +25,11 @@ namespace Api.Controllers
         [HttpGet]
         public async Task<IActionResult> GetPosts()
         {
-            var posts = await _publicacionServicio.GetPosts();
+            var posts = await _publicacionServicio.GetPosts();           
             //mapeo de una entidad base a un entidad origen o destino
             var postsDTO = _mapper.Map<IEnumerable<PublicacionDTO>>(posts);
             var respuesta = new ApiRepuesta<IEnumerable<PublicacionDTO>>(postsDTO);
+            return Ok(respuesta);
             //Metodo viejo de mapeo
             //posts.Select(x => new PublicacionDTO
             //{
@@ -38,7 +39,6 @@ namespace Api.Controllers
             //    Imagen = x.Imagen,                
             //    IdUsuario = x.IdUsuario
             //});
-            return Ok(respuesta);
         }
         [HttpGet("{id}")]
         public async Task<IActionResult> GetPost(int id)
@@ -65,7 +65,7 @@ namespace Api.Controllers
         public async Task<IActionResult> Put(int id, PublicacionDTO postDTO)
         {
             var post = _mapper.Map<Publicacion>(postDTO);
-            post.IdPublicacion = id;
+            post.id = id;
             var result = await _publicacionServicio.UpDatePost(post);
             var respuesta = new ApiRepuesta<bool>(result);
             return Ok(respuesta);

@@ -10,7 +10,10 @@ namespace Api.infraestructura.Datos.Configuracions
         {
             builder.ToTable("Publicacion"); 
 
-            builder.HasKey(e => e.IdPublicacion);
+            builder.HasKey(e => e.id);
+
+            builder.Property(e => e.id)
+               .HasColumnName("IdPublicacion");
 
             builder.Property(e => e.Descripcion)
                 .IsRequired()

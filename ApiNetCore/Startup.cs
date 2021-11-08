@@ -44,8 +44,8 @@ namespace Api
             );
             //Dependencias
             services.AddTransient<IPublicacionServicio, PublicacionServicio>();
-            services.AddTransient<IPostRepositorio, PostRepositorio>();
-            services.AddTransient<IUsuarioRepositorio, UsuarioRepositorio>();
+            //Registro base repositorio
+            services.AddScoped(typeof(IRepository<>), typeof(BaseRepositorio<>));
 
             //Registrar filtro a nivel global
             services.AddMvc(Option =>

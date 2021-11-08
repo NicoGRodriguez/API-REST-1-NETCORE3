@@ -13,9 +13,12 @@ namespace Api.infraestructura.Datos.Configuracions
         {
             builder.ToTable("Comentario");
 
-            builder.HasKey(e => e.IdComentario);
+            builder.HasKey(e => e.id);
 
-            builder.Property(e => e.IdComentario).ValueGeneratedNever();
+            builder.Property(e => e.id)
+                .HasColumnName("IdComentario")
+                .ValueGeneratedNever();
+            
 
             builder.Property(e => e.Descripcion)
                 .IsRequired()

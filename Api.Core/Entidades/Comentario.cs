@@ -7,9 +7,8 @@ using System.Collections.Generic;
 
 namespace Api.Core.Entidades
 {
-    public partial class Comentario
+    public partial class Comentario : BaseEntidad
     {
-        public int IdComentario { get; set; }
         public int IdPublicacion { get; set; }
         public int IdUsuario { get; set; }
         public string Descripcion { get; set; }

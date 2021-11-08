@@ -13,7 +13,10 @@ namespace Api.infraestructura.Datos.Configuracions
         {
             builder.ToTable("Usuario");
 
-            builder.HasKey(e => e.IdUsuario);
+            builder.HasKey(e => e.id);
+
+            builder.Property(e => e.id)
+              .HasColumnName("IdUsuario");
 
             builder.Property(e => e.Apellidos)
                 .IsRequired()

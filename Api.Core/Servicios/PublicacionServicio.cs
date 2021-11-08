@@ -9,32 +9,27 @@ namespace Api.Core.Servicios
 {
     public class PublicacionServicio : IPublicacionServicio
     {
-        private readonly IPostRepositorio _postRepositorio;
-        private readonly IUsuarioRepositorio _usuarioRepositorio;
-        public PublicacionServicio(IPostRepositorio postRepositorio, IUsuarioRepositorio usuarioRepositorio)
+        private readonly IRepository<Publicacion> _postRepositorio;
+        private readonly IRepository<Usuario> _usuarioRepositorio;
+        public PublicacionServicio(IRepository<Publicacion> postRepositorio, IRepository<Usuario> usuarioRepositorio)
         {
             _postRepositorio = postRepositorio;
             _usuarioRepositorio = usuarioRepositorio;
         }
-
-        public async Task<bool> DeletePost(int id)
-        {
-            return await _postRepositorio.DeletePost(id);
-        }
-
+        
         public async Task<Publicacion> GetPost(int id)
         {
-            return await _postRepositorio.GetPost(id);
+            return await _postRepositorio.GetById(id);
         }
 
         public async Task<IEnumerable<Publicacion>> GetPosts()
         {
-            return await _postRepositorio.GetPosts();
+            return await _postRepositorio.GetAll();
         }
 
         public async Task InsertPost(Publicacion post)
         {
-            var user = await _usuarioRepositorio.GetUsuario(post.IdUsuario);
+            var user = await _usuarioRepositorio.GetById(post.IdUsuario);
             if (user == null)
             {
                 throw new Exception("Usuario inexitente"); 
@@ -43,12 +38,18 @@ namespace Api.Core.Servicios
             {
                 throw new Exception("Contenido no permitido");
             }
-            await _postRepositorio.InsertPost(post);
+            await _postRepositorio.Add(post);
         }
 
         public async Task<bool> UpDatePost(Publicacion publi)
         {
-           return await _postRepositorio.UpDatePost(publi);
+           await _postRepositorio.Update(publi);
+            return true;
+        }
+        public async Task<bool> DeletePost(int id)
+        {
+            await _postRepositorio.Delete(id);
+            return true;
         }
     }
 }

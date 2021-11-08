@@ -7,7 +7,7 @@ using System.Collections.Generic;
 
 namespace Api.Core.Entidades
 {
-    public partial class Usuario
+    public partial class Usuario : BaseEntidad
     {
         public Usuario()
         {
@@ -15,7 +15,6 @@ namespace Api.Core.Entidades
             Publicacion = new HashSet<Publicacion>();
         }
 
-        public int IdUsuario { get; set; }
         public string Nombres { get; set; }
         public string Apellidos { get; set; }
         public string Email { get; set; }
