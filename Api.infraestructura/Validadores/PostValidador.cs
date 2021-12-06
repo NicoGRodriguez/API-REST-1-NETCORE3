@@ -1,8 +1,6 @@
 ﻿using Api.Core.DTOs;
 using FluentValidation;
 using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace Api.infraestructura.Validadores
 {

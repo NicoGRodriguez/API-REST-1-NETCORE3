@@ -8,10 +8,10 @@ namespace Api.Core.Interfaces
 {
     public interface IRepository<T> where T : BaseEntidad
     {
-        Task<IEnumerable<T>> GetAll();
+        IEnumerable<T> GetAll();
         Task<T> GetById(int id);
         Task Add(T ent);
-        Task Update(T ent);
+        void Update(T ent);
         Task Delete(int id);
 
     }

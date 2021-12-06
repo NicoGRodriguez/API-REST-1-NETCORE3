@@ -20,9 +20,9 @@ namespace Api.Core.Servicios
             return await _unitOfWork.PostRepositorio.GetById(id);
         }
 
-        public async Task<IEnumerable<Publicacion>> GetPosts()
+        public  IEnumerable<Publicacion> GetPosts()
         {
-            return await _unitOfWork.PostRepositorio.GetAll();
+            return  _unitOfWork.PostRepositorio.GetAll();
         }
 
         public async Task InsertPost(Publicacion post)
@@ -41,7 +41,8 @@ namespace Api.Core.Servicios
 
         public async Task<bool> UpDatePost(Publicacion publi)
         {
-           await _unitOfWork.PostRepositorio.Update(publi);
+            _unitOfWork.PostRepositorio.Update(publi);
+            await _unitOfWork.SaveChangesAsync();
             return true;
         }
         public async Task<bool> DeletePost(int id)

@@ -4,6 +4,7 @@ using Api.infraestructura.Datos;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -18,9 +19,9 @@ namespace Api.infraestructura.Repositorios
             _context = context;
             _entidades = context.Set<T>();
         }
-        public async Task<IEnumerable<T>> GetAll()
+        public IEnumerable<T> GetAll()
         {
-            return await _entidades.ToListAsync();
+            return  _entidades.AsEnumerable();
         }
         public async Task<T> GetById(int id)
         {
@@ -28,19 +29,16 @@ namespace Api.infraestructura.Repositorios
         }
         public async Task Add(T ent)
         {
-            _entidades.Add(ent);
-            await _context.SaveChangesAsync();
+            await _entidades.AddAsync(ent);
         }          
-        public async Task Update(T ent)
+        public void Update(T ent)
         {
             _entidades.Update(ent);
-            await _context.SaveChangesAsync();
         }
         public async Task Delete(int id)
         {
             T ent = await GetById(id);
             _entidades.Remove(ent);
-            _context.SaveChanges();
         }   
     }
 }

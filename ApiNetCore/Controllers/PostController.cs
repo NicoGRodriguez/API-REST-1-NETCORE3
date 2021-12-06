@@ -23,9 +23,9 @@ namespace Api.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> GetPosts()
+        public IActionResult GetPosts()
         {
-            var posts = await _publicacionServicio.GetPosts();           
+            var posts = _publicacionServicio.GetPosts();           
             //mapeo de una entidad base a un entidad origen o destino
             var postsDTO = _mapper.Map<IEnumerable<PublicacionDTO>>(posts);
             var respuesta = new ApiRepuesta<IEnumerable<PublicacionDTO>>(postsDTO);
