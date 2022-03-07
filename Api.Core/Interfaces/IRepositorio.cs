@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Api.Core.Interfaces
 {
-    public interface IRepository<T> where T : BaseEntidad
+    public interface IRepositorio<T> where T : BaseEntidad
     {
         IEnumerable<T> GetAll();
         Task<T> GetById(int id);

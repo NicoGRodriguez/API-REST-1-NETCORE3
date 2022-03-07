@@ -4,7 +4,7 @@ using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 namespace Api.infraestructura.Datos.Configuracions
 {
-    public class PostConfiguracion : IEntityTypeConfiguration<Publicacion>
+    public class PublicacionConfiguracion : IEntityTypeConfiguration<Publicacion>
     {
         public void Configure(EntityTypeBuilder<Publicacion> builder)
         {

@@ -11,12 +11,12 @@ namespace Api.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class PostController : ControllerBase
+    public class PublicacionController : ControllerBase
     {
         private readonly IPublicacionServicio _publicacionServicio;
         private readonly IMapper _mapper;
 
-        public PostController(IPublicacionServicio publicacionServicio, IMapper mapper)
+        public PublicacionController(IPublicacionServicio publicacionServicio, IMapper mapper)
         {
             _publicacionServicio = publicacionServicio;
             _mapper = mapper;

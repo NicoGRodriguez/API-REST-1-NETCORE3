@@ -4,9 +4,9 @@ using System;
 
 namespace Api.infraestructura.Validadores
 {
-    public class PostValidador : AbstractValidator<PublicacionDTO>
+    public class PublicacionValidador : AbstractValidator<PublicacionDTO>
     {
-        public PostValidador()
+        public PublicacionValidador()
         {
             RuleFor(Publicacion => Publicacion.Descripcion)
                 .NotNull()

@@ -8,9 +8,9 @@ namespace Api.Core.Interfaces
 {
     public interface IUnitOfWork : IDisposable
     {
-        IRepository<Publicacion> PostRepositorio { get; }
-        IRepository<Usuario> UserRepositorio { get; }
-        IRepository<Comentario> CommentRepositorio { get; }
+        IRepositorio<Publicacion> PostRepositorio { get; }
+        IRepositorio<Usuario> UserRepositorio { get; }
+        IRepositorio<Comentario> CommentRepositorio { get; }
 
         void SaveChanges();
         Task SaveChangesAsync();

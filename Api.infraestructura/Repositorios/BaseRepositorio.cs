@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 
 namespace Api.infraestructura.Repositorios
 {
-    public class BaseRepositorio<T> : IRepository<T> where T : BaseEntidad
+    public class BaseRepositorio<T> : IRepositorio<T> where T : BaseEntidad
     {
         private readonly SocialApiContext _context;
         private readonly DbSet<T> _entidades;

@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Api.Core.Interfaces
 {
-    public interface IPostRepositorio
+    public interface IPublicacionRepositorio
     {
         Task<IEnumerable<Publicacion>> GetPosts();
         Task<Publicacion> GetPost(int id);

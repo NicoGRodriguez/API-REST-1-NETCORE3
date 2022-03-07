@@ -27,7 +27,7 @@ namespace Api.infraestructura.Datos
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.ApplyConfiguration(new ComentariosConfiguracion());
-            modelBuilder.ApplyConfiguration(new PostConfiguracion());
+            modelBuilder.ApplyConfiguration(new PublicacionConfiguracion());
             modelBuilder.ApplyConfiguration(new UsuarioConfiguracion());
         }
     }
