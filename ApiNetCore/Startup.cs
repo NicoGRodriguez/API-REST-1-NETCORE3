@@ -26,6 +26,8 @@ namespace Api
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddSwaggerGen(c => { c.SwaggerDoc("v1", new Microsoft.OpenApi.Models.OpenApiInfo()); });
+            services.AddRouting(r => r.SuppressCheckForUnhandledSecurityMetadata = true);//Ruta
             //Auto Mapeos
             services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 
@@ -55,7 +57,7 @@ namespace Api
             }).AddFluentValidation(Options =>
             {
                 Options.RegisterValidatorsFromAssemblies(AppDomain.CurrentDomain.GetAssemblies());
-            });
+            });//formato personalizado con fluentvalidator
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -65,6 +67,20 @@ namespace Api
             {
                 app.UseDeveloperExceptionPage();
             }
+
+            app.UseCors("easy");
+            //Si trabajamos con un framework desde el front lo siguiente no hace falta
+            app.Use((context, next) =>
+            {
+                context.Items["__CorsMiddlewareInvoked"] = true;
+                return next();
+            });
+            app.UseSwagger();
+            app.UseSwaggerUI(c =>
+            {
+                c.SwaggerEndpoint("/swagger/v1/swagger.json", "v1");
+            });
+            //fin
 
             app.UseHttpsRedirection();
 
