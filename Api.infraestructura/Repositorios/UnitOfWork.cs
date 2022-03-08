@@ -11,14 +11,14 @@ namespace Api.infraestructura.Repositorios
     public class UnitOfWork : IUnitOfWork
     {
         private readonly SocialApiContext _context;
-        private readonly IRepositorio<Publicacion> _publicacionRepositorio;
+        private readonly IPublicacionRepositorio _publicacionRepositorio;
         private readonly IRepositorio<Usuario> _usuarioRepositorio;
         private readonly IRepositorio<Comentario> _comentarioRepositorio;
         public UnitOfWork(SocialApiContext context)
         {
             _context = context;
         }
-        public IRepositorio<Publicacion> PostRepositorio => _publicacionRepositorio ?? new BaseRepositorio<Publicacion>(_context);
+        public IPublicacionRepositorio PostRepositorio => _publicacionRepositorio ?? new PublicacionRepositorio(_context);
 
         public IRepositorio<Usuario> UserRepositorio => _usuarioRepositorio ?? new BaseRepositorio<Usuario>(_context);
 

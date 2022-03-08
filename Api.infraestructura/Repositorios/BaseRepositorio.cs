@@ -13,7 +13,7 @@ namespace Api.infraestructura.Repositorios
     public class BaseRepositorio<T> : IRepositorio<T> where T : BaseEntidad
     {
         private readonly SocialApiContext _context;
-        private readonly DbSet<T> _entidades;
+        protected readonly DbSet<T> _entidades;
         public BaseRepositorio(SocialApiContext context)
         {
             _context = context;

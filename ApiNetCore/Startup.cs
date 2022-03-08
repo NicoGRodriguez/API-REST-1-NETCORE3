@@ -32,7 +32,10 @@ namespace Api
             services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 
             //se agrego referencia circular nula.
-            services.AddControllers().AddNewtonsoftJson(option =>
+            services.AddControllers(options =>
+            {
+                options.Filters.Add<GlobalExcepcionFiltro>();
+            }).AddNewtonsoftJson(option =>
             {
                 option.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore;
             })

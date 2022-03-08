@@ -8,7 +8,7 @@ namespace Api.Core.Interfaces
 {
     public interface IUnitOfWork : IDisposable
     {
-        IRepositorio<Publicacion> PostRepositorio { get; }
+        IPublicacionRepositorio PostRepositorio { get; }
         IRepositorio<Usuario> UserRepositorio { get; }
         IRepositorio<Comentario> CommentRepositorio { get; }
 

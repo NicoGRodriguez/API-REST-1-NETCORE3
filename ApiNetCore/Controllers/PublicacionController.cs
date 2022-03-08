@@ -1,10 +1,13 @@
-﻿using Api.Core.DTOs;
+﻿using Api.Core.ConsultaFiltros;
+using Api.Core.DTOs;
 using Api.Core.Entidades;
 using Api.Core.Interfaces;
 using Api.Respuestas;
 using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
+using System;
 using System.Collections.Generic;
+using System.Net;
 using System.Threading.Tasks;
 
 namespace Api.Controllers
@@ -23,9 +26,11 @@ namespace Api.Controllers
         }
 
         [HttpGet]
-        public IActionResult GetPosts()
+        [ProducesResponseType((int)HttpStatusCode.OK)]
+        [ProducesResponseType((int)HttpStatusCode.BadRequest)]
+        public IActionResult GetPosts([FromQuery]PublicacionConsultaFiltro filtros)
         {
-            var posts = _publicacionServicio.GetPosts();           
+            var posts = _publicacionServicio.GetPosts(filtros);           
             //mapeo de una entidad base a un entidad origen o destino
             var postsDTO = _mapper.Map<IEnumerable<PublicacionDTO>>(posts);
             var respuesta = new ApiRepuesta<IEnumerable<PublicacionDTO>>(postsDTO);
