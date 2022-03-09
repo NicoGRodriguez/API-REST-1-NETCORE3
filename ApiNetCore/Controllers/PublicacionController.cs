@@ -5,6 +5,7 @@ using Api.Core.Interfaces;
 using Api.Respuestas;
 using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Net;
@@ -34,6 +35,16 @@ namespace Api.Controllers
             //mapeo de una entidad base a un entidad origen o destino
             var postsDTO = _mapper.Map<IEnumerable<PublicacionDTO>>(posts);
             var respuesta = new ApiRepuesta<IEnumerable<PublicacionDTO>>(postsDTO);
+            var metaData = new
+            {
+                posts.TotalItem,
+                posts.CatidadItemPagina,
+                posts.PaginaActual,
+                posts.TotalPaginas,
+                posts.IrPaginaProxima,
+                posts.IrPaginaPrevia
+            };
+            Response.Headers.Add("x-paginacion", JsonConvert.SerializeObject(metaData));
             return Ok(respuesta);
             //Metodo viejo de mapeo
             //posts.Select(x => new PublicacionDTO

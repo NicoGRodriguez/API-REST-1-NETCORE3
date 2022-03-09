@@ -2,6 +2,7 @@
 using Api.Core.Entidades;
 using Api.Core.Excepciones;
 using Api.Core.Interfaces;
+using Api.Core.PersonalizadasEntidades;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -23,7 +24,7 @@ namespace Api.Core.Servicios
             return await _unitOfWork.PostRepositorio.GetById(id);
         }
 
-        public  IEnumerable<Publicacion> GetPosts(PublicacionConsultaFiltro filtros)
+        public ListaPagina<Publicacion> GetPosts(PublicacionConsultaFiltro filtros)
         {
             var posts = _unitOfWork.PostRepositorio.GetAll();
             if (filtros.idUsuario != null)
@@ -38,7 +39,9 @@ namespace Api.Core.Servicios
             {
                 posts = posts.Where(x => x.Descripcion.ToLower().Contains(filtros.descripcion.ToLower()));
             }
-            return posts;
+            var paginadoPublicaciones = ListaPagina<Publicacion>.Creacion(posts, filtros.numeroPagina, filtros.cantidadItemPagina);
+            
+            return paginadoPublicaciones;
         }
 
         public async Task InsertPost(Publicacion post)

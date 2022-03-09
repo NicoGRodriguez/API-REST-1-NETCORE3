@@ -9,5 +9,7 @@ namespace Api.Core.ConsultaFiltros
         public int? idUsuario { get; set; }
         public DateTime? fecha { get; set; }
         public string descripcion { get; set; }
+        public int numeroPagina { get; set; }
+        public int cantidadItemPagina { get; set; }
     }
 }
