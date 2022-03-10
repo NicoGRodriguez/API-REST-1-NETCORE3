@@ -6,29 +6,29 @@ namespace Api.Core.PersonalizadasEntidades
 {
     public class ListaPagina<T> : List<T>
     {
-        public int PaginaActual { get; set; }
-        public int TotalPaginas { get; set; }
-        public int CatidadItemPagina { get; set; }
-        public int TotalItem { get; set; }
+        public int PaginaActual { get; set; } //CurrenPage
+        public int TotalPaginas { get; set; } //TotalPages
+        public int ItemsPaginaTrae { get; set; } //ItemsPaginaTrae=PageSize
+        public int TotalItem { get; set; } //Totalcount
 
-        public bool IrPaginaPrevia => PaginaActual > 1;
-        public bool IrPaginaProxima => PaginaActual < TotalPaginas;
+        public bool IrPaginaPrevia => PaginaActual > 1; 
+        public bool IrPaginaProxima => PaginaActual < TotalPaginas; 
         public int? NumeroPaginaPrevia => IrPaginaPrevia ? PaginaActual - 1 : (int?)null;
         public int? NumeroPaginaProxima => IrPaginaProxima ? PaginaActual + 1 : (int?)null;
-        public ListaPagina(List<T> items, int cantidad, int numeroPagina, int cantidadItemPagina)
+        public ListaPagina(List<T> items, int cantidad, int numeroPagina, int itemsPaginaTrae)
         {
             TotalItem = cantidad;
-            CatidadItemPagina = cantidadItemPagina;
+            ItemsPaginaTrae = itemsPaginaTrae;
             PaginaActual = numeroPagina;
-            TotalItem = (int)Math.Ceiling(cantidad / (double)cantidadItemPagina);
+            TotalPaginas = (int)Math.Ceiling(cantidad / (double)itemsPaginaTrae);
 
             AddRange(items);
         }
-        public static ListaPagina<T> Creacion(IEnumerable<T> fuente, int numeroPagina, int cantidadItemPagina)
+        public static ListaPagina<T> Creacion(IEnumerable<T> fuente, int numeroPagina, int ItemsPaginaTrae)
         {
             var cantidad = fuente.Count();
-            var items = fuente.Skip((numeroPagina - 1) * cantidadItemPagina).Take(cantidadItemPagina).ToList();
-            return new ListaPagina<T>(items, cantidad, numeroPagina, cantidadItemPagina);
+            var items = fuente.Skip((numeroPagina - 1) * ItemsPaginaTrae).Take(ItemsPaginaTrae).ToList();
+            return new ListaPagina<T>(items, cantidad, numeroPagina, ItemsPaginaTrae);
         }
     }
 }

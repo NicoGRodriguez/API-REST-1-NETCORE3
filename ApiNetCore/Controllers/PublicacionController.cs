@@ -2,6 +2,8 @@
 using Api.Core.DTOs;
 using Api.Core.Entidades;
 using Api.Core.Interfaces;
+using Api.Core.PersonalizadasEntidades;
+using Api.infraestructura.Interfaces;
 using Api.Respuestas;
 using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
@@ -19,33 +21,41 @@ namespace Api.Controllers
     {
         private readonly IPublicacionServicio _publicacionServicio;
         private readonly IMapper _mapper;
+        private readonly IUriService _uriService;
 
-        public PublicacionController(IPublicacionServicio publicacionServicio, IMapper mapper)
+        public PublicacionController(IPublicacionServicio publicacionServicio, IMapper mapper, IUriService uriService)
         {
             _publicacionServicio = publicacionServicio;
             _mapper = mapper;
+            _uriService = uriService;
         }
 
-        [HttpGet]
+        [HttpGet (Name = nameof(GetPosts))]
         [ProducesResponseType((int)HttpStatusCode.OK)]
         [ProducesResponseType((int)HttpStatusCode.BadRequest)]
-        public IActionResult GetPosts([FromQuery]PublicacionConsultaFiltro filtros)
+        public IActionResult GetPosts([FromQuery] PublicacionConsultaFiltro filtros)
         {
-            var posts = _publicacionServicio.GetPosts(filtros);           
+            var posts = _publicacionServicio.GetPosts(filtros);
             //mapeo de una entidad base a un entidad origen o destino
             var postsDTO = _mapper.Map<IEnumerable<PublicacionDTO>>(posts);
-            var respuesta = new ApiRepuesta<IEnumerable<PublicacionDTO>>(postsDTO);
-            var metaData = new
+            var metadata = new Metadata
             {
-                posts.TotalItem,
-                posts.CatidadItemPagina,
-                posts.PaginaActual,
-                posts.TotalPaginas,
-                posts.IrPaginaProxima,
-                posts.IrPaginaPrevia
+                TotalItem = posts.TotalItem,
+                CantidadItemPagina = posts.ItemsPaginaTrae,
+                PaginaActual = posts.PaginaActual,
+                TotalPaginas = posts.TotalPaginas,
+                IrPaginaProxima = posts.IrPaginaProxima,
+                IrPaginaPrevia = posts.IrPaginaPrevia,
+                PaginaProximaUrl = _uriService.GetPostPaginationUri(filtros, Url.RouteUrl(nameof(GetPosts))).ToString(),
+                PaginaPreviaUrl = _uriService.GetPostPaginationUri(filtros, Url.RouteUrl(nameof(GetPosts))).ToString()
             };
-            Response.Headers.Add("x-paginacion", JsonConvert.SerializeObject(metaData));
+            var respuesta = new ApiRepuesta<IEnumerable<PublicacionDTO>>(postsDTO) { Meta = metadata };
+            Response.Headers.Add("x-paginacion", JsonConvert.SerializeObject(metadata));
+
             return Ok(respuesta);
+
+
+
             //Metodo viejo de mapeo
             //posts.Select(x => new PublicacionDTO
             //{

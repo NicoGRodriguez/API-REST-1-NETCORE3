@@ -2,10 +2,13 @@ using Api.Core.Interfaces;
 using Api.Core.Servicios;
 using Api.infraestructura.Datos;
 using Api.infraestructura.Filtros;
+using Api.infraestructura.Interfaces;
 using Api.infraestructura.Repositorios;
+using Api.infraestructura.Services;
 using FluentValidation.AspNetCore;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -38,6 +41,8 @@ namespace Api
             }).AddNewtonsoftJson(option =>
             {
                 option.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore;
+                //las propiedades null las ignora
+                option.SerializerSettings.NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore;
             })
             //Apicontroller no valida, se hace manual.
             .ConfigureApiBehaviorOptions(option => { 
@@ -52,6 +57,13 @@ namespace Api
             //Registro base repositorio
             services.AddScoped(typeof(IRepositorio<>), typeof(BaseRepositorio<>));
             services.AddTransient<IUnitOfWork,UnitOfWork>();
+            services.AddSingleton<IUriService>(provider =>
+            {
+                var accesor = provider.GetRequiredService<IHttpContextAccessor>();
+                var request = accesor.HttpContext.Request;
+                var absolutUri = string.Concat(request.Scheme, "://", request.Host.ToUriComponent());
+                return new UriService(absolutUri);
+            });
             
             //Registrar filtro a nivel global
             services.AddMvc(Option =>
