@@ -3,10 +3,9 @@ using Api.Core.Entidades;
 using Api.Core.Excepciones;
 using Api.Core.Interfaces;
 using Api.Core.PersonalizadasEntidades;
+using Microsoft.Extensions.Options;
 using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace Api.Core.Servicios
@@ -14,11 +13,13 @@ namespace Api.Core.Servicios
     public class PublicacionServicio : IPublicacionServicio
     {
         private readonly IUnitOfWork _unitOfWork;
-        public PublicacionServicio(IUnitOfWork unitOfWork)
+        private readonly PaginacionOpciones _paginacionOpciones;
+        public PublicacionServicio(IUnitOfWork unitOfWork, IOptions<PaginacionOpciones> paginacionOpciones)
         {
             _unitOfWork = unitOfWork;
+            _paginacionOpciones = paginacionOpciones.Value;
         }
-        
+
         public async Task<Publicacion> GetPost(int id)
         {
             return await _unitOfWork.PostRepositorio.GetById(id);
@@ -26,6 +27,9 @@ namespace Api.Core.Servicios
 
         public ListaPagina<Publicacion> GetPosts(PublicacionConsultaFiltro filtros)
         {
+            filtros.numeroPagina = filtros.numeroPagina == 0 ? _paginacionOpciones.DefaultnumeroPagina : filtros.numeroPagina;
+            filtros.cantidadItemPagina = filtros.cantidadItemPagina == 0 ? _paginacionOpciones.DefaultCantidadItemPagina : filtros.cantidadItemPagina;
+            
             var posts = _unitOfWork.PostRepositorio.GetAll();
             if (filtros.idUsuario != null)
             {

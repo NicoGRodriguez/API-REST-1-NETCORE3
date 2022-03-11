@@ -8,13 +8,13 @@ using Api.Respuestas;
 using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
-using System;
 using System.Collections.Generic;
 using System.Net;
 using System.Threading.Tasks;
 
 namespace Api.Controllers
 {
+    [Produces("application/json")]
     [Route("api/[controller]")]
     [ApiController]
     public class PublicacionController : ControllerBase
@@ -29,7 +29,11 @@ namespace Api.Controllers
             _mapper = mapper;
             _uriService = uriService;
         }
-
+        /// <summary>
+        /// Trae todas las publicaciones
+        /// </summary>
+        /// <param name="filtros">filtros aplicados</param>
+        /// <returns></returns>
         [HttpGet (Name = nameof(GetPosts))]
         [ProducesResponseType((int)HttpStatusCode.OK)]
         [ProducesResponseType((int)HttpStatusCode.BadRequest)]

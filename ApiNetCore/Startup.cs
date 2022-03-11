@@ -1,4 +1,5 @@
 using Api.Core.Interfaces;
+using Api.Core.PersonalizadasEntidades;
 using Api.Core.Servicios;
 using Api.infraestructura.Datos;
 using Api.infraestructura.Filtros;
@@ -13,7 +14,10 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Microsoft.OpenApi.Models;
 using System;
+using System.IO;
+using System.Reflection;
 
 namespace Api
 {
@@ -29,7 +33,14 @@ namespace Api
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddSwaggerGen(c => { c.SwaggerDoc("v1", new Microsoft.OpenApi.Models.OpenApiInfo()); });
+            services.AddSwaggerGen(c => 
+            { 
+                c.SwaggerDoc("v1", new OpenApiInfo { Title="SOCIAL API", Version="1" });
+
+                var xmlFile = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
+                var xmlPath = Path.Combine(AppContext.BaseDirectory, xmlFile);
+                c.IncludeXmlComments(xmlPath);
+            });
             services.AddRouting(r => r.SuppressCheckForUnhandledSecurityMetadata = true);//Ruta
             //Auto Mapeos
             services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
@@ -48,6 +59,8 @@ namespace Api
             .ConfigureApiBehaviorOptions(option => { 
                 //option.SuppressModelStateInvalidFilter = true; 
             });
+
+            services.Configure<PaginacionOpciones>(Configuration.GetSection("Paginacion"));
 
             //conexion a la base datos
             services.AddDbContext<SocialApiContext>(options => options.UseSqlServer(Configuration.GetConnectionString("SocialApi"))
@@ -93,9 +106,9 @@ namespace Api
             app.UseSwagger();
             app.UseSwaggerUI(c =>
             {
-                c.SwaggerEndpoint("/swagger/v1/swagger.json", "v1");
+                c.SwaggerEndpoint("/swagger/v1/swagger.json", "SocialMedia V1");
+                c.RoutePrefix = string.Empty;
             });
-            //fin
 
             app.UseHttpsRedirection();
 
