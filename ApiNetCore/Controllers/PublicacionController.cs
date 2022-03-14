@@ -6,6 +6,7 @@ using Api.Core.PersonalizadasEntidades;
 using Api.infraestructura.Interfaces;
 using Api.Respuestas;
 using AutoMapper;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
 using System.Collections.Generic;
@@ -14,6 +15,7 @@ using System.Threading.Tasks;
 
 namespace Api.Controllers
 {
+    [Authorize]
     [Produces("application/json")]
     [Route("api/[controller]")]
     [ApiController]
@@ -32,7 +34,7 @@ namespace Api.Controllers
         /// <summary>
         /// Trae todas las publicaciones
         /// </summary>
-        /// <param name="filtros">filtros aplicados</param>
+        /// <param name="filtros">Filtros</param>
         /// <returns></returns>
         [HttpGet (Name = nameof(GetPosts))]
         [ProducesResponseType((int)HttpStatusCode.OK)]
@@ -70,6 +72,11 @@ namespace Api.Controllers
             //    IdUsuario = x.IdUsuario
             //});
         }
+        /// <summary>
+        /// Trae una sola publicacion por id
+        /// </summary>
+        /// <param name="id">id de la publicacion</param>
+        /// <returns></returns>
         [HttpGet("{id}")]
         public async Task<IActionResult> GetPost(int id)
         {
@@ -78,6 +85,11 @@ namespace Api.Controllers
             var respuesta = new ApiRepuesta<PublicacionDTO>(postDTO);
             return Ok(respuesta);
         }
+        /// <summary>
+        /// Hace una publicacion
+        /// </summary>
+        /// <param name="postDTO">Datos de la publicacion</param>
+        /// <returns></returns>
         [HttpPost]
         public async Task<IActionResult> Post(PublicacionDTO postDTO)
         {
@@ -91,6 +103,12 @@ namespace Api.Controllers
             var respuesta = new ApiRepuesta<PublicacionDTO>(postDTO);
             return Ok(respuesta);
         }
+        /// <summary>
+        /// Modifica datos de la publicacion
+        /// </summary>
+        /// <param name="id">Id de la publicacion</param>
+        /// <param name="postDTO">Datos de la publicacion a modificar</param>
+        /// <returns></returns>
         [HttpPut]
         public async Task<IActionResult> Put(int id, PublicacionDTO postDTO)
         {
@@ -100,6 +118,11 @@ namespace Api.Controllers
             var respuesta = new ApiRepuesta<bool>(result);
             return Ok(respuesta);
         }
+        /// <summary>
+        /// Borra una publicacion
+        /// </summary>
+        /// <param name="id">Id de la publicacion</param>
+        /// <returns></returns>
         [HttpDelete("{id}")]
         public async Task<IActionResult> Delete(int id)
         {

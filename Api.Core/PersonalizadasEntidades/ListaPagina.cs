@@ -8,7 +8,7 @@ namespace Api.Core.PersonalizadasEntidades
     {
         public int PaginaActual { get; set; } //CurrenPage
         public int TotalPaginas { get; set; } //TotalPages
-        public int ItemsPaginaTrae { get; set; } //ItemsPaginaTrae=PageSize
+        public int ItemsPaginaTrae { get; set; } //PageSize
         public int TotalItem { get; set; } //Totalcount
 
         public bool IrPaginaPrevia => PaginaActual > 1; 
